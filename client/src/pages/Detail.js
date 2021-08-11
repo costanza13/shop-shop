@@ -32,11 +32,17 @@ function Detail() {
         _id: itemInCart._id,
         purchaseQuantity: parseInt(itemInCart.purchaseQuantity) + 1
       });
+      idbPromise('cart', 'put', {
+        ...itemInCart,
+        purchaseQuantity: parseInt(itemInCart.purchaseQuantity) + 1
+      });
     } else {
+      const { category, description, __typename, ...productForCart } = currentProduct;
       dispatch({
         type: ADD_TO_CART,
-        product: { ...currentProduct, purchaseQuantity: 1 }
+        product: { ...productForCart, purchaseQuantity: 1 }
       });
+      idbPromise('cart', 'put', { ...productForCart, purchaseQuantity: 1 });
     }
   };
 
@@ -45,6 +51,7 @@ function Detail() {
       type: REMOVE_FROM_CART,
       _id: currentProduct._id
     });
+    idbPromise('cart', 'delete', { ...currentProduct });
   };
 
   useEffect(() => {
@@ -85,7 +92,7 @@ function Detail() {
 
           <p>
             <strong>Price:</strong>${currentProduct.price}{' '}
-            <button onClick={addToCart}>Add to Cart</button>
+            <button onClick={() => addToCart()}>Add to Cart</button>
             <button
               disabled={!cart.find(p => p._id === currentProduct._id)}
               onClick={removeFromCart}
