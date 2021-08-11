@@ -9,6 +9,7 @@ import {
   UPDATE_PRODUCTS
 } from '../utils/actions';
 import { QUERY_PRODUCTS } from '../utils/queries';
+import { idbPromise } from '../utils/helpers';
 import Cart from '../components/Cart';
 import spinner from '../assets/spinner.gif';
 
@@ -48,12 +49,26 @@ function Detail() {
 
   useEffect(() => {
     if (products.length) {
-      const product = products.find((product) => product._id === id);
-      setCurrentProduct(product);
-    } else if (data) {
+      setCurrentProduct(products.find((product) => product._id === id));
+    }
+    // retrieved from server
+    else if (data) {
       dispatch({
         type: UPDATE_PRODUCTS,
         products: data.products
+      });
+
+      data.products.forEach(product => {
+        idbPromise('products', 'put', product);
+      });
+    }
+    // get from idb
+    else if (!loading) {
+      idbPromise('products', 'get').then(indexedProducts => {
+        dispatch({
+          type: UPDATE_PRODUCTS,
+          products: indexedProducts
+        });
       });
     }
   }, [products, data, dispatch, id]);
