@@ -78,7 +78,7 @@ function Detail() {
         });
       });
     }
-  }, [products, data, dispatch, id]);
+  }, [products, loading, data, dispatch, id]);
 
   return (
     <>
