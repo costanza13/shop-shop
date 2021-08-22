@@ -39,7 +39,7 @@ function ProductList() {
 
     return products.filter(product => product.category._id === currentCategory);
   }
-console.log(products, currentCategory);
+
   return (
     <div className="my-2">
       <h2>Our Products:</h2>
