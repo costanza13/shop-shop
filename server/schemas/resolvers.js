@@ -6,6 +6,7 @@ const { signToken } = require('../utils/auth');
 const resolvers = {
   Query: {
     categories: async () => {
+      console.log('fetching categories');
       return await Category.find();
     },
     products: async (parent, { category, name }) => {
