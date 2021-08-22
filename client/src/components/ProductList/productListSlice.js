@@ -10,10 +10,11 @@ export const slice = createSlice({
       state.products = [...action.payload];
     }
   }
-})
+});
 
 export const { updateProducts } = slice.actions;
 
 export const selectProducts = state => state.productList.products;
+export const selectCurrentCategory = state => state.categoryMenu.currentCategory;
 
 export default slice.reducer;

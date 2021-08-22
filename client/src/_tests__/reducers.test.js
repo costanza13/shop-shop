@@ -8,8 +8,8 @@ import {
   UPDATE_CART_QUANTITY,
   CLEAR_CART,
   TOGGLE_CART
-} from '../utils/reActions';
-import { reducer } from '../utils/reReducers';
+} from '../utils/actions';
+import { reducer } from '../utils/reducers';
 
 // sample state object
 const initialState = {

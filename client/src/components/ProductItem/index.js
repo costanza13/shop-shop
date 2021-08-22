@@ -1,13 +1,13 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom';
 import { pluralize, idbPromise } from '../../utils/helpers'
-import { useStoreContext } from '../../utils/reGlobalState';
-import { ADD_TO_CART, UPDATE_CART_QUANTITY } from '../../utils/actions';
+import { selectCart, addToCart, updateCartQuantity } from '../Cart/cartSlice';
 
 function ProductItem(item) {
-  const [state, dispatch] = useStoreContext();
+  const cart = useSelector(selectCart);
+  const dispatch = useDispatch();
 
-  const { cart } = state;
   const {
     image,
     name,
@@ -16,25 +16,21 @@ function ProductItem(item) {
     quantity
   } = item;
 
-  const addToCart = () => {
+  const addItemToCart = () => {
     const itemInCart = cart.find(cartItem => cartItem._id === _id);
 
     if (itemInCart) {
-      dispatch({
-        type: UPDATE_CART_QUANTITY,
-        _id: itemInCart._id,
-        purchaseQuantity: parseInt(itemInCart.purchaseQuantity) + 1
-      });
+      dispatch(updateCartQuantity({
+         _id: itemInCart._id,
+          purchaseQuantity: parseInt(itemInCart.purchaseQuantity) + 1
+      }));
       idbPromise('cart', 'put', {
         ...itemInCart,
         purchaseQuantity: parseInt(itemInCart.purchaseQuantity) + 1
       });
 
     } else {
-      dispatch({
-        type: ADD_TO_CART,
-        product: { ...item, purchaseQuantity: 1 }
-      });
+      dispatch(addToCart({ ...item, purchaseQuantity: 1 }));
       idbPromise('cart', 'put', { ...item, purchaseQuantity: 1 });
     }
   };
@@ -52,7 +48,7 @@ function ProductItem(item) {
         <div>{quantity} {pluralize("item", quantity)} in stock</div>
         <span>${price}</span>
       </div>
-      <button onClick={addToCart}>Add to cart</button>
+      <button onClick={addItemToCart}>Add to cart</button>
     </div>
   );
 }

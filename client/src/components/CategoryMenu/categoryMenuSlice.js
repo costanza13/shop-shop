@@ -14,7 +14,7 @@ export const slice = createSlice({
       state.currentCategory = action.payload;
     }
   }
-})
+});
 
 export const { updateCategories, updateCurrentCategory } = slice.actions;
 

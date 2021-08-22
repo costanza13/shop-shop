@@ -4,14 +4,13 @@ import { useSelector, useDispatch } from 'react-redux'
 import ProductItem from '../ProductItem';
 import { QUERY_PRODUCTS } from '../../utils/queries';
 import { idbPromise } from '../../utils/helpers';
-import { selectCurrentCategory } from '../CategoryMenu/categoryMenuSlice';
-import { selectProducts, updateProducts } from './productListSlice';
+import { selectCurrentCategory, selectProducts, updateProducts } from './productListSlice';
 import spinner from '../../assets/spinner.gif';
 
 function ProductList() {
   const currentCategory = useSelector(selectCurrentCategory);
-  const dispatch = useDispatch();
   const products = useSelector(selectProducts);
+  const dispatch = useDispatch();
   const { loading, data } = useQuery(QUERY_PRODUCTS);
 
   useEffect(() => {

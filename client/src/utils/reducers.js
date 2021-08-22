@@ -9,7 +9,7 @@ import {
   UPDATE_CART_QUANTITY,
   CLEAR_CART,
   TOGGLE_CART
-} from './reActions';
+} from './actions';
 
 export const reducer = (state, action) => {
   switch (action.type) {
