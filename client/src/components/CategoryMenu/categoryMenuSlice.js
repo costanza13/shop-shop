@@ -9,23 +9,17 @@ export const slice = createSlice({
   reducers: {
     updateCategories: (state, action) => {
       state.categories = [...action.payload];
-      console.log('bung', state.categories);
     },
     updateCurrentCategory: (state, action) => {
-      state.currentCategory = action.currentCategory;
-      console.log('ho', state.currentCategory);
+      state.currentCategory = action.payload;
     }
   }
 })
 
-export const { updateCategories, updateCurrentCategory } = slice.actions
+export const { updateCategories, updateCurrentCategory } = slice.actions;
 
-export const selectCategories = state => {
-  return state.categoryMenu.categories;
-};
+export const selectCategories = state => state.categoryMenu.categories;
 
-export const selectCurrentCategory = state => {
-  return state.categoryMenu.currentCategory;
-};
+export const selectCurrentCategory = state => state.categoryMenu.currentCategory;
 
 export default slice.reducer;

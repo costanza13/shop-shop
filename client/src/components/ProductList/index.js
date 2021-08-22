@@ -5,20 +5,19 @@ import ProductItem from '../ProductItem';
 import { QUERY_PRODUCTS } from '../../utils/queries';
 import { idbPromise } from '../../utils/helpers';
 import { selectCurrentCategory } from '../CategoryMenu/categoryMenuSlice';
+import { selectProducts, updateProducts } from './productListSlice';
 import spinner from '../../assets/spinner.gif';
 
 function ProductList() {
-  const [state, dispatch] = useStoreContext();
-  const { currentCategory } = useSelector(selectCurrentCategory);
+  const currentCategory = useSelector(selectCurrentCategory);
+  const dispatch = useDispatch();
+  const products = useSelector(selectProducts);
   const { loading, data } = useQuery(QUERY_PRODUCTS);
 
   useEffect(() => {
     if (data) {
-      // store it in global state
-      dispatch({
-        type: UPDATE_PRODUCTS,
-        products: data.products
-      });
+      // store it in redux store
+      dispatch(updateProducts(data.products));
 
       // also store each product in IndexedDB
       data.products.forEach(product => {
@@ -29,26 +28,23 @@ function ProductList() {
       // offline, so get data from the 'products' store in IndexedDB
       idbPromise('products', 'get').then(products => {
         // put 'em  into global state
-        dispatch({
-          type: UPDATE_PRODUCTS,
-          products: products
-        });
+        dispatch(updateProducts(products));
       });
     }
   }, [data, loading, dispatch]);
 
   function filterProducts() {
     if (!currentCategory) {
-      return state.products;
+      return products;
     }
 
-    return state.products.filter(product => product.category._id === currentCategory);
+    return products.filter(product => product.category._id === currentCategory);
   }
-
+console.log(products, currentCategory);
   return (
     <div className="my-2">
       <h2>Our Products:</h2>
-      {state.products.length ? (
+      {products.length ? (
         <div className="flex-row">
           {filterProducts().map((product) => (
             <ProductItem
